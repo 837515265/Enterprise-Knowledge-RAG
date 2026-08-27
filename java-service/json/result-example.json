@@ -1,0 +1,72 @@
+{
+  "taskNo": "CE20250327191",
+  "files": [
+    {
+      "ocrFileId": "7d807cf271424ac2882a6b7cc8211f9c",
+      "fileId": "9355a47a41bd44c093f2ef7cbee5bd6a"
+    }
+  ],
+  "config": [
+    {
+      "nearFieldKeys": [
+        "借款合同金额",
+        "合同金额"
+      ],
+      "fieldKey": "借款金额",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "1"
+    },
+    {
+      "nearFieldKeys": [],
+      "fieldKey": "借款人",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "0"
+    },
+    {
+      "nearFieldKeys": [
+        "借款利率"
+      ],
+      "fieldKey": "借款合同利率",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "0"
+    },
+    {
+      "nearFieldKeys": [],
+      "fieldKey": "借款合同编号",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "0"
+    },
+    {
+      "nearFieldKeys": [],
+      "fieldKey": "证件号码",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "0"
+    },
+    {
+      "nearFieldKeys": [],
+      "fieldKey": "借款合同期限",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "0"
+    },
+    {
+      "nearFieldKeys": [],
+      "fieldKey": "借款合同开始日",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "2"
+    },
+    {
+      "nearFieldKeys": [],
+      "fieldKey": "借款合同到期日",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "2"
+    }
+  ]
+}

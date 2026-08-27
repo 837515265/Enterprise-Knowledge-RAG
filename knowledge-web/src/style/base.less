@@ -1,0 +1,59 @@
+html,
+body,
+#app,
+#root {
+  height: 100%;
+}
+
+canvas {
+  display: block;
+}
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: inline;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizelegibility;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* 滚动条样式 begin */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  width: 8px;
+  background: #f6f6f8 !important;
+  border-radius: 2em;
+}
+
+::-webkit-scrollbar-thumb {
+  min-height: 28px;
+  background-color: #e1e1e1 !important;
+  background-clip: padding-box;
+  border-radius: 2em;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #c7c6c6 !important;
+}
+
+.colorWeak {
+  filter: invert(80%);
+}

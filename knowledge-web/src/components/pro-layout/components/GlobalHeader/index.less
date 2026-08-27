@@ -1,0 +1,119 @@
+@import "ant-design-vue/es/style/themes/default";
+
+@global-header-prefix-cls: ~"ant-pro-global-header";
+
+@pro-header-bg: @component-background;
+@pro-header-hover-bg: @component-background;
+@pro-header-box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+@pro-header-hover-trigger-action-bg: rgba(0, 0, 0, 0.025);
+
+.@{global-header-prefix-cls} {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  height: @layout-header-height;
+  background: @pro-header-bg;
+  box-shadow: @pro-header-box-shadow;
+
+  &-index-right {
+    float: right;
+    overflow: hidden;
+    margin-left: auto;
+    height: 100%;
+
+    .@{global-header-prefix-cls}-index-action {
+      display: inline-block;
+      padding: 0 12px;
+      height: 100%;
+      transition: all 0.3s;
+      cursor: pointer;
+
+      &:hover {
+        background: @pro-header-hover-trigger-action-bg;
+      }
+    }
+  }
+
+  &-logo {
+    display: inline-block;
+    padding: 0 0 0 24px;
+    height: @layout-header-height;
+    font-size: 20px;
+    line-height: @layout-header-height;
+    vertical-align: top;
+    cursor: pointer;
+
+    img,
+    svg {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      vertical-align: middle;
+    }
+  }
+
+  &-menu {
+    .anticon {
+      margin-right: 8px;
+    }
+
+    .ant-dropdown-menu-item {
+      min-width: 160px;
+    }
+  }
+
+  &-trigger {
+    display: inline-block;
+    padding: 0 22px;
+    height: @layout-header-height;
+    transition: all 0.3s, padding 0s;
+    line-height: @layout-header-height;
+    vertical-align: top;
+    cursor: pointer;
+
+    .anticon {
+      font-size: 20px;
+      vertical-align: -0.225em;
+    }
+
+    &:hover {
+      background: @pro-header-hover-trigger-action-bg;
+    }
+  }
+
+  &-content {
+    display: inline-block;
+    height: @layout-header-height;
+    line-height: @layout-header-height;
+    vertical-align: top;
+  }
+
+  .dark {
+    height: @layout-header-height;
+
+    .action {
+      color: hsla(0deg, 0%, 100%, 0.85);
+
+      > i {
+        color: hsla(0deg, 0%, 100%, 0.85);
+      }
+
+      &:hover,
+      &.opened {
+        background: @primary-color;
+      }
+
+      .ant-badge {
+        color: hsla(0deg, 0%, 100%, 0.85);
+      }
+    }
+  }
+
+  .ant-pro-global-header-index-action {
+    i {
+      color: hsla(0deg, 0%, 0%, 0.65);
+      vertical-align: middle;
+    }
+  }
+}

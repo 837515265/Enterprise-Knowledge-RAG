@@ -1,0 +1,76 @@
+# danbao-poc profile-based configuration
+# Works like Spring: spring.profiles.active selects which profile block to use.
+# Active profile is determined by APP_ENV environment variable (default: dev).
+
+profiles:
+  active: ${APP_ENV:dev}
+
+---
+profiles: local
+nacos:
+  enabled: false
+  config_enabled: false
+  server_addr: ""
+app:
+  name: app-rag-doc
+
+---
+profiles: dev
+nacos:
+  enabled: true
+  config_enabled: true
+  server_addr: "http://10.10.20.90:8848"
+  group_name: DEFAULT_GROUP
+  config_group: DEFAULT_GROUP
+  namespace_id: ""
+  cluster_name: DEFAULT
+  username: "nacos"
+  config_data_id: "app-rag-doc-dev"
+  app_service_name: app-rag-doc
+  heartbeat_interval_seconds: 5
+  config_poll_interval_seconds: 15
+  ephemeral: true
+app:
+  name: app-rag-doc
+
+---
+profiles: sit
+nacos:
+  enabled: true
+  config_enabled: true
+  server_addr: "http://10.81.136.30:8848"
+  group_name: DEFAULT_GROUP
+  config_group: DEFAULT_GROUP
+  namespace_id: ""
+  cluster_name: DEFAULT
+  username: "nacos"
+  config_data_id: "app-rag-doc-sit"
+  app_service_name: app-rag-doc
+  heartbeat_interval_seconds: 5
+  config_poll_interval_seconds: 15
+  ephemeral: true
+es:
+  vector_type: css
+app:
+  name: app-rag-doc
+
+---
+profiles: prd
+nacos:
+  enabled: true
+  config_enabled: true
+  server_addr: "http://172.22.136.60:8848"
+  group_name: DEFAULT_GROUP
+  config_group: DEFAULT_GROUP
+  namespace_id: ""
+  cluster_name: DEFAULT
+  username: "nacos"
+  config_data_id: "app-rag-doc-prd"
+  app_service_name: app-rag-doc
+  heartbeat_interval_seconds: 5
+  config_poll_interval_seconds: 15
+  ephemeral: true
+es:
+  vector_type: css
+app:
+  name: app-rag-doc

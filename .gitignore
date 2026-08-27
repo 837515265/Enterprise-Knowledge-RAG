@@ -1,0 +1,52 @@
+# =============================================
+# 凭据与本地环境（防误提交，宁可多挡）
+# =============================================
+.env.local
+.env.development
+.env.production
+.env.*.local
+*.local.yml
+application-local.yml
+application-dev.yml
+application-sit.yml
+application-prd.yml
+*.pem
+*.key
+id_rsa
+id_ed25519
+
+# =============================================
+# Python
+# =============================================
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# =============================================
+# Node / 前端构建产物
+# =============================================
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# =============================================
+# Java / Maven
+# =============================================
+target/
+*.class
+*.jar
+*.war
+
+# =============================================
+# IDE / 系统
+# =============================================
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

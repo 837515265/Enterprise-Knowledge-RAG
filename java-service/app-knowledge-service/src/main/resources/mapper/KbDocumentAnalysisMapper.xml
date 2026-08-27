@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ludan.app.mapper.KbDocumentAnalysisMapper">
+
+    <select id="selectFileContext" resultType="java.util.Map">
+        SELECT id,
+               kb_id AS kbId,
+               name AS fileName,
+               current_parse_generation AS parseGeneration,
+               parse_status AS parseStatus,
+               multimodal_enabled AS multimodalEnabled
+        FROM kb_file_node
+        WHERE id = #{fileId}
+          AND kb_id = #{kbId}
+          AND node_type = 'file'
+          AND del_flag = 0
+        LIMIT 1
+    </select>
+
+    <select id="selectChunkTypeStats" resultType="java.util.Map">
+        SELECT COALESCE(chunk_type, 'text') AS chunkType,
+               COALESCE(section_type, '') AS sectionType,
+               COUNT(*) AS chunkCount,
+               MIN(page_start) AS pageStart,
+               MAX(page_end) AS pageEnd
+        FROM kb_chunk
+        WHERE kb_id = #{kbId}
+          AND file_node_id = #{fileId}
+          AND parse_generation = #{parseGeneration}
+          AND del_flag = 0
+        GROUP BY chunk_type, section_type
+        ORDER BY chunkCount DESC
+    </select>
+
+    <select id="selectSections" resultType="java.util.Map">
+        SELECT section_id AS sectionId,
+               parent_section_id AS parentSectionId,
+               section_title AS sectionTitle,
+               section_path AS sectionPath,
+               section_level AS sectionLevel,
+               section_type AS sectionType,
+               seq_start AS seqStart,
+               seq_end AS seqEnd,
+               page_start AS pageStart,
+               page_end AS pageEnd,
+               covered_chunk_ids_json AS coveredChunkIdsJson,
+               block_ids AS blockIds,
+               metadata_json AS metadataJson
+        FROM kb_section
+        WHERE kb_id = #{kbId}
+          AND file_node_id = #{fileId}
+          AND parse_generation = #{parseGeneration}
+        ORDER BY seq_start ASC, section_level ASC, id ASC
+    </select>
+
+    <select id="selectSectionSummaries" resultType="java.util.Map">
+        SELECT id,
+               section_id AS sectionId,
+               section_title AS sectionTitle,
+               section_path AS sectionPath,
+               section_level AS sectionLevel,
+               summary_type AS summaryType,
+               node_summary AS nodeSummary,
+               structured_summary_json AS structuredSummaryJson,
+               covered_chunk_ids_json AS coveredChunkIdsJson,
+               summary_source AS summarySource,
+               confidence
+        FROM kb_section_summary
+        WHERE kb_id = #{kbId}
+          AND file_node_id = #{fileId}
+          AND parse_generation = #{parseGeneration}
+        ORDER BY section_level ASC, id ASC
+    </select>
+
+    <select id="selectKnowledgeUnits" resultType="java.util.Map">
+        SELECT unit_id AS unitId,
+               unit_type AS unitType,
+               unit_subtype AS unitSubtype,
+               anchor_id AS anchorId,
+               subject_text AS subjectText,
+               predicate_text AS predicateText,
+               object_text AS objectText,
+               value_type AS valueType,
+               normalized_json AS normalizedJson,
+               source_section_id AS sourceSectionId,
+               primary_chunk_id AS primaryChunkId,
+               evidence_quote AS evidenceQuote,
+               confidence,
+               status,
+               metadata_json AS metadataJson
+        FROM kb_knowledge_unit
+        WHERE kb_id = #{kbId}
+          AND file_node_id = #{fileId}
+          AND parse_generation = #{parseGeneration}
+          AND (status IS NULL OR status = 'active')
+        ORDER BY CASE unit_type
+                   WHEN 'process_step' THEN 1
+                   WHEN 'rule' THEN 2
+                   WHEN 'condition' THEN 3
+                   WHEN 'responsibility' THEN 4
+                   ELSE 5
+                 END,
+                 id ASC
+        LIMIT 300
+    </select>
+
+    <select id="selectAnchors" resultType="java.util.Map">
+        SELECT anchor_id AS anchorId,
+               anchor_type AS anchorType,
+               anchor_name AS anchorName,
+               normalized_name AS normalizedName,
+               aliases_json AS aliasesJson,
+               source_section_id AS sourceSectionId,
+               source_chunk_id AS sourceChunkId,
+               evidence_quote AS evidenceQuote,
+               confidence,
+               status,
+               metadata_json AS metadataJson
+        FROM kb_anchor_registry
+        WHERE kb_id = #{kbId}
+          AND file_node_id = #{fileId}
+          AND parse_generation = #{parseGeneration}
+          AND (status IS NULL OR status = 'active')
+        ORDER BY confidence DESC, id ASC
+        LIMIT 200
+    </select>
+
+    <select id="selectRelations" resultType="java.util.Map">
+        SELECT relation_id AS relationId,
+               relation_type AS relationType,
+               from_type AS fromType,
+               from_id AS fromId,
+               to_type AS toType,
+               to_id AS toId,
+               source_chunk_id AS sourceChunkId,
+               evidence_quote AS evidenceQuote,
+               confidence,
+               status,
+               metadata_json AS metadataJson
+        FROM kb_relation
+        WHERE kb_id = #{kbId}
+          AND file_node_id = #{fileId}
+          AND parse_generation = #{parseGeneration}
+          AND (status IS NULL OR status = 'active')
+        ORDER BY confidence DESC, id ASC
+        LIMIT 300
+    </select>
+
+</mapper>

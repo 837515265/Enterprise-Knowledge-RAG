@@ -1,0 +1,8 @@
+build/*.js
+public
+dist
+lib
+node_modules
+prettierrc
+.DS_Store
+.eslintrc.json

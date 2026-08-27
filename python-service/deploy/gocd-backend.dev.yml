@@ -1,0 +1,45 @@
+# GoCD backend deployment config for dev.
+# Copy the app-rag-doc block into /app/comm/scripts/gocd-deploy-backend/demo.yml.
+# Business settings are loaded from Nacos config Data ID: app-rag-doc-dev.yml.
+
+- name: app-rag-doc
+  hosts: [ '10.10.20.38' ]
+  port: 20751
+  env_params:
+    - var: APP_ENV
+      val: 'dev'
+    - var: APP_PORT
+      val: '20751'
+    - var: LOG_DIR
+      val: '/home/appuser/app/logs'
+    - var: DATA_DIR
+      val: '/app/data'
+
+    - var: NACOS_ENABLED
+      val: 'true'
+    - var: NACOS_CONFIG_ENABLED
+      val: 'true'
+    - var: NACOS_SERVER_ADDR
+      val: 'http://10.10.20.90:8848'
+    - var: NACOS_NAMESPACE_ID
+      val: ''
+    - var: NACOS_GROUP_NAME
+      val: 'DEFAULT_GROUP'
+    - var: NACOS_CONFIG_GROUP
+      val: 'DEFAULT_GROUP'
+    - var: NACOS_CLUSTER_NAME
+      val: 'DEFAULT'
+    - var: NACOS_USERNAME
+      val: 'nacos'
+    - var: NACOS_PASSWORD
+      val: '${APP_RAG_DOC_NACOS_PASSWORD}'
+    - var: NACOS_REGISTER_IP
+      val: '10.10.20.38'
+    - var: NACOS_APP_SERVICE_NAME
+      val: 'app-rag-doc'
+    - var: NACOS_CONFIG_DATA_ID
+      val: 'app-rag-doc-dev'
+
+  vol_params:
+    - host_vol: /app/apps/app-rag-doc/logs
+      docker_vol: /home/appuser/app/logs

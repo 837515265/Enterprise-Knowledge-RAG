@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ludan.app.mapper.KbAuditHistoryMapper">
+
+    <select id="findList" resultType="com.ludan.app.entity.KbAuditHistory">
+        SELECT * FROM kb_audit_history
+        <where>
+            <if test="p.kbId != null">
+                AND kb_id = #{p.kbId}
+            </if>
+            <if test="p.bizType != null and p.bizType != ''">
+                AND biz_type = #{p.bizType}
+            </if>
+            <if test="p.status != null and p.status != ''">
+                AND status = #{p.status}
+            </if>
+        </where>
+        ORDER BY reviewed_at DESC
+    </select>
+
+</mapper>

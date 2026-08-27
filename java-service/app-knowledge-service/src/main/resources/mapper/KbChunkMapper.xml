@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ludan.app.mapper.KbChunkMapper">
+
+    <select id="findByFileNode" resultType="com.ludan.app.entity.KbChunk">
+        SELECT
+            c.id,
+            c.kb_id,
+            c.file_node_id,
+            c.seq_no,
+            COALESCE(cr.content, c.content) AS content,
+            COALESCE(cr.summary, c.summary) AS summary,
+            c.enabled,
+            c.audit_status,
+            c.reject_reason,
+            c.index_record_id,
+            c.index_sync_status,
+            c.sync_error_msg,
+            c.published_revision_id,
+            c.latest_revision_id,
+            c.parse_generation,
+            c.index_generation,
+            c.content_hash,
+            COALESCE(cr.page_start, c.page_start) AS page_start,
+            COALESCE(cr.page_end, c.page_end) AS page_end,
+            c.chunk_type,
+            c.section_type,
+            c.section_id,
+            c.chunk_group_id,
+            COALESCE(cr.block_ids, c.block_ids) AS block_ids,
+            COALESCE(cr.metadata_json, c.metadata_json) AS metadata_json,
+            cr.title AS title,
+            cr.title_path AS title_path,
+            c.create_time,
+            c.update_time,
+            c.creator,
+            c.updator,
+            c.create_name,
+            c.update_name,
+            c.del_flag
+        FROM kb_chunk c
+        LEFT JOIN kb_chunk_revision cr ON cr.id = c.latest_revision_id
+        <where>
+            c.del_flag = 0
+            AND c.file_node_id = #{p.fileNodeId}
+            AND c.kb_id = #{p.kbId}
+            <if test="p.auditStatus != null and p.auditStatus != ''">
+                AND c.audit_status = #{p.auditStatus}
+            </if>
+            <if test="p.enabled != null">
+                AND c.enabled = #{p.enabled}
+            </if>
+            <if test="p.contentOnly != null and p.contentOnly == 'true'">
+                AND c.chunk_type NOT IN ('image', 'image_group')
+            </if>
+        </where>
+        ORDER BY c.seq_no ASC
+    </select>
+
+</mapper>

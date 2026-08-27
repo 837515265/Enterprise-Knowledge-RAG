@@ -1,0 +1,9 @@
+# Redisson 单机配置（本地环境，连接池已缩小）
+singleServerConfig:
+  address: "redis://10.10.20.90:6379"
+  database: 15
+  connectionMinimumIdleSize: 1
+  connectionPoolSize: 10
+  connectTimeout: 10000
+  timeout: 3000
+  retryAttempts: 5

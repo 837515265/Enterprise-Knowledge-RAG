@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.ludan</groupId>
+    <artifactId>app-knowledge-service</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>app-knowledge-service</name>
+    <packaging>jar</packaging>
+    <description>知识库管理平台微服务</description>
+
+    <parent>
+        <groupId>com.ludan</groupId>
+        <artifactId>app-knowledge</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ludan</groupId>
+            <artifactId>app-knowledge-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ludan</groupId>
+            <artifactId>ludan-common-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ludan</groupId>
+            <artifactId>ludan-db-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ludan</groupId>
+            <artifactId>ludan-redis-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ludan</groupId>
+            <artifactId>ludan-ribbon-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ludan</groupId>
+            <artifactId>ludan-sentinel-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.11.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.16.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xuxueli</groupId>
+            <artifactId>xxl-job-core</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ludan</groupId>
+            <artifactId>message_distribution_api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ludan</groupId>
+            <artifactId>common-inner-proxy-sdk</artifactId>
+            <version>1.4.4-RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.ludan</groupId>
+            <artifactId>ludan-interface-management-starter</artifactId>
+            <version>4.2.5-RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ludan</groupId>
+            <artifactId>ludan-swagger2-spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!--打包后的Jar包文件名-->
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <!--指定启动类，将依赖打成外部jar包-->
+            <!--指定配置文件，将resources打成外部resources-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <excludes>
+                        <exclude>*.yml</exclude>
+                        <exclude>*.yaml</exclude>
+                        <exclude>*.properties</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <!--拷⻉依赖到jar外⾯的lib⽬录-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-lib</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/libs</outputDirectory>
+                            <excludeTransitive>false</excludeTransitive>
+                            <stripVersion>false</stripVersion>
+                            <!--test (default) scope gives all dependencies-->
+                            <includeScope>test</includeScope>
+                            <excludeGroupIds>com.ludan</excludeGroupIds>
+                        </configuration>
+                    </execution>
+                    <!--拷贝鲁担数科依赖-->
+                    <execution>
+                        <id>copy-ldsk-lib</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/ldsk-libs</outputDirectory>
+                            <excludeTransitive>false</excludeTransitive>
+                            <stripVersion>false</stripVersion>
+                            <includeScope>test</includeScope>
+                            <includeGroupIds>com.ludan</includeGroupIds>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--拷⻉资源文件到jar外⾯的resources⽬录-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <!--资源文件输出⽬录-->
+                            <outputDirectory>${project.build.directory}/resources</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

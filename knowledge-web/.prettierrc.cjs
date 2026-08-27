@@ -1,0 +1,1 @@
+module.exports = require('@ldsk/ld-eslint-config/.prettierrc.js')

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ludan.app.mapper.KbOperationLogMapper">
+
+    <select id="findList" resultType="com.ludan.app.entity.KbOperationLog">
+        SELECT * FROM kb_operation_log
+        <where>
+            <if test="p.kbId != null">
+                AND kb_id = #{p.kbId}
+            </if>
+            <if test="p.action != null and p.action != ''">
+                AND action = #{p.action}
+            </if>
+            <if test="p.objectType != null and p.objectType != ''">
+                AND object_type = #{p.objectType}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,60 @@
+spring:
+  profiles:
+    active: local
+
+---
+spring:
+  profiles: local
+  cloud:
+    nacos:
+      config:
+        enabled: false
+  application:
+    name: app-knowledge-service
+  main:
+    allow-bean-definition-overriding: true
+
+---
+spring:
+  profiles: dev
+  cloud:
+    nacos:
+      config:
+        enabled: true
+        server-addr: 10.10.20.90:8848
+        prefix: app-knowledge-service
+        file-extension: yml
+  application:
+    name: app-knowledge-service
+  main:
+    allow-bean-definition-overriding: true
+
+---
+spring:
+  profiles: sit
+  cloud:
+    nacos:
+      config:
+        enabled: true
+        server-addr: 10.81.136.30:8848
+        prefix: app-knowledge-service
+        file-extension: yml
+  application:
+    name: app-knowledge-service
+  main:
+    allow-bean-definition-overriding: true
+
+---
+spring:
+  profiles: prd
+  cloud:
+    nacos:
+      config:
+        enabled: true
+        server-addr: 172.22.136.60:8848
+        prefix: app-knowledge-service
+        file-extension: yml
+  application:
+    name: app-knowledge-service
+  main:
+    allow-bean-definition-overriding: true

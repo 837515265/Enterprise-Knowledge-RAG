@@ -1,0 +1,7 @@
+dist
+lib
+public
+types
+node_modules
+*.json
+index.html

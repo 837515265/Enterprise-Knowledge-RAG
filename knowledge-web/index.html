@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="/favicon.jpg">
+  <title>%VITE_APP_NAME%</title>
+  <style>
+    #global-loading {
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #f7f8fd;
+    }
+
+    .global-loading-header-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 220px;
+    }
+
+    .global-loading-bar-wrapper {
+      width: 100%;
+      height: 6px;
+      background: #ececf6;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 28px;
+      box-shadow: 0 2px 8px 0 #7f5fff11;
+      position: relative;
+    }
+
+    .global-loading-bar {
+      height: 100%;
+      width: 30%;
+      background: linear-gradient(90deg, #7f5fff 0%, #32c5ff 100%);
+      border-radius: 3px;
+      box-shadow: 0 0 8px 0 #7f5fff33;
+      position: absolute;
+      left: 0;
+      top: 0;
+      will-change: transform, opacity, width;
+      animation: loading-bar-move 1s linear infinite;
+    }
+
+    @keyframes loading-bar-move {
+      0% {
+        transform: translateX(0);
+        opacity: 0;
+        width: 30%;
+      }
+
+      10% {
+        opacity: 0.3;
+      }
+
+      50% {
+        opacity: 1;
+        width: 60%;
+      }
+
+
+      90% {
+        opacity: 0.3;
+      }
+
+
+      100% {
+        transform: translateX(300%);
+        opacity: 0;
+        width: 30%;
+      }
+    }
+
+    .global-loading-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #232946;
+      margin-top: 8px;
+      user-select: none;
+      text-align: center;
+      font-family: 'Segoe UI', 'Arial', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      animation: fadeIn .4s;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body class="">
+  <noscript>
+    <strong>We're sorry but this page doesn't work properly without JavaScript enabled. Please enable it to
+      continue.</strong>
+  </noscript>
+  <!-- 加载动画容器 -->
+  <div id="global-loading">
+    <div style="display: flex; flex-direction: column; align-items: center;padding-bottom: 80px;">
+      <!-- 只保留 class，不要 style -->
+      <div class="global-loading-header-group" style="display: flex; flex-direction: column; align-items: center;">
+        <div class="global-loading-header" style="display: flex; align-items: center; margin-bottom: 28px;">
+          <img src="/favicon.jpg" alt="logo"
+            style="width: 30px; height: 30px; border-radius: 8px; margin-right: 12px; box-shadow: 0 2px 8px #7f5fff22;">
+          <div class="global-loading-title" style="margin: 0;">
+            %VITE_APP_NAME%
+          </div>
+        </div>
+        <div class="global-loading-bar-wrapper">
+          <div class="global-loading-bar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
+  <!--  theme配置  -->
+  <link rel="stylesheet/less" type="text/css" href="/theme.less" />
+  <script>
+    window.less = {
+      async: false,
+      env: 'production',
+      javascriptEnabled: true
+    };
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>担保方案解析检索 POC</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>担保方案解析检索 POC</h1>
+        <p>解析服务、图谱导入、中文字段检索的最小闭环测试台</p>
+      </div>
+      <button id="healthBtn" class="secondary">检查服务</button>
+    </header>
+
+    <main class="layout">
+      <section class="panel">
+        <div class="panel-title">
+          <span class="step">1</span>
+          <h2>上传 PDF 并解析入库</h2>
+        </div>
+        <div class="grid">
+          <label>
+            知识库 ID
+            <input id="kbId" value="kb_danbao_001" />
+          </label>
+          <label>
+            文档 ID
+            <input id="docId" value="doc_demo_001" />
+          </label>
+          <label>
+            文件名
+            <input id="fileName" value="demo.pdf" />
+          </label>
+          <label>
+            Profile
+            <input id="profile" value="guarantee_plan" />
+          </label>
+        </div>
+        <label>
+          PDF 文件
+          <input id="pdfFile" type="file" accept=".pdf,.png,.jpg,.jpeg" />
+        </label>
+        <p class="hint">业务服务会保存文件到业务库对应的附件目录，调用解析服务，拿到 chunks/fields 后写入 Postgres。</p>
+        <button id="parseBtn">上传并解析入库</button>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">
+          <span class="step">2</span>
+          <h2>业务库文档</h2>
+        </div>
+        <p class="hint">文档、chunks、结构化字段已由 business-service 写入 Postgres。列表用于确认入库结果。</p>
+        <button id="listBtn">刷新文档列表</button>
+        <button id="indexBtn" class="secondary">同步当前文档到 Neo4j</button>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">
+          <span class="step">3</span>
+          <h2>中文检索</h2>
+        </div>
+        <label>
+          问题
+          <input id="query" value="这个方案最高额度是多少" />
+        </label>
+        <div class="inline">
+          <label>
+            Top K
+            <input id="topK" type="number" min="1" max="20" value="5" />
+          </label>
+          <button id="retrieveBtn">直接检索</button>
+        </div>
+        <p class="hint">查询会先由 business-service 从 Postgres 读取 chunks/fields，再调用 retrieve-service。</p>
+      </section>
+
+      <section class="panel output-panel">
+        <div class="panel-title">
+          <span class="step">4</span>
+          <h2>执行结果</h2>
+        </div>
+        <div id="status" class="status">等待操作</div>
+        <div id="retrieveInsights" class="insights" hidden>
+          <div class="metric-row">
+            <div>
+              <span class="metric-label">置信度</span>
+              <strong id="confidenceValue">-</strong>
+            </div>
+            <div>
+              <span class="metric-label">路由</span>
+              <div id="routeBadges" class="badges"></div>
+            </div>
+          </div>
+          <div class="insight-grid">
+            <section>
+              <h3>证据组</h3>
+              <div id="evidenceList" class="evidence-list"></div>
+            </section>
+            <section>
+              <h3>引用协议</h3>
+              <div id="referenceList" class="reference-list"></div>
+            </section>
+          </div>
+          <details class="prompt-box">
+            <summary>Answer Context Prompt</summary>
+            <pre id="answerPrompt"></pre>
+          </details>
+        </div>
+        <pre id="output">{}</pre>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

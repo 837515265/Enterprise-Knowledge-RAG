@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <!--服务名-->
+    <!--需要修改服务名-->
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name" value="app-ai-center-service"/>
+    <!--日志输出路径-->
+    <!--注意在.gitignore文件中排除本地日志文件路径-->
+    <property name="LOG_PATH" value="logs"/>
+    <!--日志文件名-->
+    <property name="LOG_FILE_NAME" value="app-info"/>
+    <!--输出格式-->
+    <!--引入Sleuth后输出链路追踪信息-->
+    <property name="PATTERN"
+              value="%date{yyyy-MM-dd HH:mm:ss.SSS}|${PID}|%level|[${APP_NAME},%X{traceId},%X{spanId},%X{parentId}]|%thread|%logger|%message%n"/>
+    <!--文件输出-->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--最新日志文件不带日期-->
+        <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--文件名格式-->
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!--滚动策略:日志文件大于100MB时生成一个新的日志文件，每天生成一个新的日志文件-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--日志文件保存60天-->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <prudent>false</prudent>
+    </appender>
+    <!--控制台输出-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!--日志输出级别-->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

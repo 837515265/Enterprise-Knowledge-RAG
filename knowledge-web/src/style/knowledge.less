@@ -1,0 +1,226 @@
+/**
+ * 知识库模块全局样式 — 基于原型 app.css 的 design tokens
+ * 所有 .kb-page* 和 .kb-card* 类在知识库各页面复用
+ */
+
+/* ---- 页面壳层 ---- */
+.kb-page {
+  padding: 24px 28px 40px;
+  min-height: 100vh;
+  overflow: auto;
+}
+
+.kb-page-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.kb-page-inner--wide {
+  max-width: 1180px;
+}
+
+.kb-page-inner--full {
+  max-width: 1520px;
+  width: 100%;
+}
+
+/* ---- 页头区域 ---- */
+.kb-page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.kb-page-title {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.kb-page-desc {
+  margin: 0 0 20px;
+  color: #64748b;
+  line-height: 1.55;
+}
+
+/* ---- 搜索栏（内联） ---- */
+.kb-search-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+
+  input {
+    border: none;
+    outline: none;
+    width: 200px;
+    font-size: 14px;
+    background: transparent;
+  }
+}
+
+/* ---- Tab pill 组 ---- */
+.kb-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.kb-tab-btn {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.12s;
+
+  &:hover { background: #f8fafc; }
+  &.is-active {
+    border-color: #2563eb;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-weight: 600;
+  }
+}
+
+/* ---- 卡片网格 ---- */
+.kb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.kb-card {
+  display: block;
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #93c5fd;
+    box-shadow: 0 8px 28px rgba(37, 99, 235, 0.08);
+  }
+}
+
+.kb-card-badge {
+  float: right;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #ecfdf5;
+  color: #15803d;
+}
+
+.kb-card h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+  clear: both;
+  color: #0f172a;
+}
+
+.kb-card-type {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.kb-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 8px;
+
+  span {
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #eff6ff;
+    color: #1d4ed8;
+  }
+}
+
+.kb-card-desc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0 0 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.kb-card-meta {
+  font-size: 12px;
+  color: #94a3b8;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* ---- 空状态 ---- */
+.kb-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: #94a3b8;
+  border: 1px dashed #e5e7eb;
+  border-radius: 14px;
+  background: #fff;
+}
+
+/* ---- 按钮 ---- */
+.kb-btn-sm {
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.12s;
+
+  &:hover { border-color: #93c5fd; }
+
+  &.primary {
+    border-color: #2563eb;
+    background: #2563eb;
+    color: #fff;
+    &:hover { background: #1d4ed8; }
+  }
+}
+
+/* ---- badge 状态 ---- */
+.kb-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &--pending { background: #fffbeb; color: #b45309; }
+  &--ok { background: #ecfdf5; color: #15803d; }
+  &--reject { background: #fef2f2; color: #b91c1c; }
+  &--partial { background: #fff7ed; color: #c2410c; }
+}
+
+/* ---- 响应式 ---- */
+@media (max-width: 900px) {
+  .kb-page { padding: 16px; }
+  .kb-grid { grid-template-columns: 1fr; }
+}

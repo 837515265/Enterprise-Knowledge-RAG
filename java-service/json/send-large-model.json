@@ -1,0 +1,73 @@
+{
+  "taskNo": "CE2025032000065",
+  "files": [
+    {
+      "ocrFileId": "",
+      "fileId": "f30c9983328a4676a839995a331bd661"
+    }
+  ],
+  "config": [
+    {
+      "nearFieldKeys": [
+        "借款合同金额",
+        "合同金额"
+      ],
+      "fieldKey": "借款金额",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "1"
+    },
+    {
+      "nearFieldKeys": [],
+      "fieldKey": "借款人",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "0"
+    },
+    {
+      "nearFieldKeys": [
+        "借款利率"
+      ],
+      "fieldKey": "借款合同利率",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "0"
+    },
+    {
+      "nearFieldKeys": [],
+      "fieldKey": "借款合同编号",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "0"
+    },
+    {
+      "nearFieldKeys": [],
+      "fieldKey": "证件号码",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "0"
+    },
+    {
+      "nearFieldKeys": [],
+      "fieldKey": "借款合同期限",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "0"
+    },
+    {
+      "nearFieldKeys": [],
+      "fieldKey": "借款合同开始日",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "2"
+    },
+    {
+      "nearFieldKeys": [],
+      "fieldKey": "借款合同到期日",
+      "fieldValueOptions": [],
+      "description": "",
+      "fieldKeyType": "2"
+    }
+  ],
+  "prompt": "1. 如果没有直接提及【借款合同期限（月）】或其近义词，但提取到了【借款合同开始日】和【借款合同到期日】，则【借款合同期限（月）】基于以下公式计算：\n\n        ### **计算规则**\n\n        * **仅计算年和月，不考虑具体日期（日）**。\n        * 计算方式：借款合同期限（月）=(到期年−开始年)×12+(到期月−开始月)+1\n        * **忽略开始日和到期日的具体天数**，即无论是哪一天开始或结束，只计算年份和月份的差值，**包含起始月份和到期月份**。\n\n        ### **示例**\n        【借款合同开始日】为 2025-03-04，【借款合同到期日】为 2026-02-27\n        计算总月数：(2026−2025)×12+(2−3)+1=12\n        【借款合同开始日】为 2021-07-09，【借款合同到期日】为 2024-06-10\n        计算总月数：(2024−2021)×12+(6−7)+1=36\n\n\n        2.每行文字之前的序号无实际意义，直接忽略。\n\n        3. 合同编号不会跨行，也不会被其他文字隔开，一定是连续的。取值可以是数字和字母的组合，也可以是形如“XX行个借字XX年XX号”的形式。如果在参考资料中找到了“个借字”，且“个借字”前面有银行或支行名称，则作为合同编号一并提取。参考资料中如果出现了“合同编号:XXX”，其中“XXX”就是合同编号。合同编号的结果不会少于10个字符。\n\n        4.借款合同利率的取值为浮点数，如果参考资料中提及与LPR相关但是没有具体的数值，则视为没有提取到。"
+}

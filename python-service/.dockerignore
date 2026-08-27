@@ -1,0 +1,15 @@
+.venv
+__pycache__
+*.pyc
+.env
+.env.*
+!.env.example
+neo4j
+postgres
+opensearch
+redis
+minio
+data
+logs
+scripts
+.git

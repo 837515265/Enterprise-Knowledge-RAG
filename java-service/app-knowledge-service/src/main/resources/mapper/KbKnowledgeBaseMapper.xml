@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ludan.app.mapper.KbKnowledgeBaseMapper">
+
+    <select id="findList" resultType="com.ludan.app.dto.resp.KbListRespDTO">
+        SELECT
+            kb.id,
+            kb.name,
+            kb.type,
+            kb.description,
+            kb.visibility,
+            kb.status,
+            kb.file_audit_enabled,
+            kb.qa_audit_enabled,
+            kb.member_count,
+            (
+                SELECT COUNT(1)
+                FROM kb_file_node fn
+                WHERE fn.kb_id = kb.id
+                  AND fn.node_type = 'file'
+                  AND fn.del_flag = 0
+            ) AS fileCount,
+            (
+                SELECT COUNT(DISTINCT c.file_node_id)
+                FROM kb_chunk c
+                INNER JOIN kb_file_node fn ON fn.id = c.file_node_id
+                    AND fn.kb_id = kb.id
+                    AND fn.node_type = 'file'
+                    AND fn.del_flag = 0
+                WHERE c.kb_id = kb.id
+                  AND c.audit_status = 'pending'
+                  AND c.del_flag = 0
+            ) AS pendingFileCount,
+            (
+                SELECT COUNT(1)
+                FROM kb_qa_pair qa
+                WHERE qa.kb_id = kb.id
+                  AND qa.audit_status = 'pending'
+                  AND qa.del_flag = 0
+            ) AS pendingQaCount,
+            kb.parse_strategy_config_id,
+            kb.retrieval_config_id,
+            kb.model_profile,
+            CASE
+                WHEN #{p.currentUserId} IS NOT NULL AND (
+                    kb.creator = #{p.currentUserId}
+                    OR EXISTS (
+                        SELECT 1
+                        FROM kb_permission_rule owner_pr
+                        WHERE owner_pr.kb_id = kb.id
+                          AND owner_pr.rule_type = 'user'
+                          AND owner_pr.target_id = #{p.currentUserId}
+                          AND owner_pr.grant_role = 'admin'
+                    )
+                ) THEN 'owner'
+                WHEN #{p.currentUserId} IS NOT NULL AND EXISTS (
+                    SELECT 1
+                    FROM kb_permission_rule member_pr
+                    WHERE member_pr.kb_id = kb.id
+                      AND member_pr.rule_type = 'user'
+                      AND member_pr.target_id = #{p.currentUserId}
+                ) THEN 'member'
+                ELSE NULL
+            END AS role,
+            CASE
+                WHEN #{p.currentUserId} IS NOT NULL AND (
+                    kb.creator = #{p.currentUserId}
+                    OR EXISTS (
+                        SELECT 1
+                        FROM kb_permission_rule owner_pr
+                        WHERE owner_pr.kb_id = kb.id
+                          AND owner_pr.rule_type = 'user'
+                          AND owner_pr.target_id = #{p.currentUserId}
+                          AND owner_pr.grant_role = 'admin'
+                    )
+                ) THEN 1
+                ELSE 0
+            END AS isOwner,
+            kb.create_name,
+            kb.create_time,
+            kb.update_time
+        FROM kb_knowledge_base kb
+        <where>
+            kb.del_flag = 0
+            <if test="p.keyword != null and p.keyword != ''">
+                AND kb.name LIKE CONCAT('%', #{p.keyword}, '%')
+            </if>
+            <if test="p.visibility != null and p.visibility != ''">
+                AND kb.visibility = #{p.visibility}
+            </if>
+            <if test="p.status != null and p.status != ''">
+                AND kb.status = #{p.status}
+            </if>
+            <if test="p.type != null and p.type != ''">
+                AND kb.type = #{p.type}
+            </if>
+            <if test="p.tagId != null">
+                AND EXISTS (
+                    SELECT 1 FROM kb_kb_tag kt WHERE kt.kb_id = kb.id AND kt.tag_id = #{p.tagId}
+                )
+            </if>
+        </where>
+        ORDER BY kb.update_time DESC, kb.create_time DESC
+    </select>
+
+</mapper>

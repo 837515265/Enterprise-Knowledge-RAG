@@ -1,0 +1,118 @@
+# 本地开发配置示例（脱敏）。
+# 复制为 application-local.yml 并填入真实值后使用。
+# 真实凭据/密钥一律不进入代码仓库。
+server:
+  # 与 app-ai-center-service 错开端口，便于本机同时启动
+  port: 20748
+
+mysql:
+  username: <fill-in>
+  password: <fill-in>
+  host: <fill-in>
+  port: 3306
+  database: ai_contract
+
+spring:
+  application:
+    name: app-knowledge-service
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${mysql.username}
+    password: ${mysql.password}
+  redis:
+    host: <fill-in>
+    database: 15
+    port: 6379
+    redisson:
+      config: classpath:redisson-local.yaml
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    inetutils:
+      preferred-networks: 10.10
+    nacos:
+      server-addr: <fill-in>:8848
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      logic-delete-field: del_flag
+
+sso:
+  default:
+    client_id: knowledge
+    client_secret: <fill-in>
+
+feign:
+  client:
+    config:
+      common-inner-proxy:
+        connectTimeout: 2000
+        # 自动多轮模式下单次调用最大等待（毫秒），Bisheng 复杂 workflow 可能较长
+        readTimeout: 120000
+      app-rag-doc:
+        connectTimeout: 2000
+        # 检索/workflow 可能较慢，与 Ribbon 超时对齐，避免仅 Feign 拉长仍被 Ribbon 默认读超时打断
+        readTimeout: 120000
+
+common-inner-proxy:
+  ribbon:
+    ConnectTimeout: 2000
+    ReadTimeout: 120000
+  streamUrl: http://common-inner-proxy/proxy/inner/stream/request
+
+# 解析/检索实际对应同一个 AI 引擎微服务；本地默认也走 Nacos 注册名 app-rag-doc
+parse-engine:
+  service-name: app-rag-doc
+  api-token: ""
+  default-profile: auto
+  enabled: true
+  poll-enabled: false
+  poll-initial-delay-ms: 10000
+  poll-fixed-delay-ms: 10000
+  poll-batch-size: 20
+
+# 检索：Feign 调用同一个 AI 引擎服务（实例列表由 Nacos 解析）
+retrieval-engine:
+  enabled: true
+  service-name: app-rag-doc
+  api-token: ""
+  default-profile: general_document
+  default-top-k: 40
+  compat-retrieve-path: false
+  index-async-mode: true
+
+app-rag-doc:
+  ribbon:
+    ConnectTimeout: 2000
+    ReadTimeout: 120000
+
+# 大模型走内部代理调用 new-api 配置。
+llm:
+  third-app-id: NEW_API
+  third-interface-id: chat-completions
+  apply-app-id: APP_KNOWLEDGE_SERVICE
+  third-url: /v1/chat/completions
+  api-key: <fill-in>
+  default-model: qwen2.5-32b
+  connect-timeout: 5000
+  read-timeout: 120000
+
+xxl:
+  job:
+    admin-addresses: <fill-in>
+    access-token: ''
+    executor:
+      appname: app-knowledge-service
+      address: ''
+      ip: <fill-in>
+      log-path: logs/xxl-job-logs
+      log-retention-days: 1
