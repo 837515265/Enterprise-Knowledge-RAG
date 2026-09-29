@@ -237,10 +237,10 @@ class HttpModelClient:
 
 
 class EmbeddingClient:
-    def __init__(self) -> None:
-        self.base_url = os.getenv("EMBEDDING_BASE_URL") or os.getenv("DEFAULT_MODEL_BASE_URL", "")
-        self.api_key = os.getenv("EMBEDDING_API_KEY") or os.getenv("DEFAULT_MODEL_API_KEY", "EMPTY")
-        self.model = os.getenv("EMBEDDING_MODEL_NAME", "")
+    def __init__(self, base_url: str | None = None, api_key: str | None = None, model: str | None = None) -> None:
+        self.base_url = base_url or os.getenv("EMBEDDING_BASE_URL") or os.getenv("DEFAULT_MODEL_BASE_URL", "")
+        self.api_key = api_key or os.getenv("EMBEDDING_API_KEY") or os.getenv("DEFAULT_MODEL_API_KEY", "EMPTY")
+        self.model = model or os.getenv("EMBEDDING_MODEL_NAME", "")
         self.timeout = _int_env("EMBEDDING_TIMEOUT", 120)
         if not self.base_url or not self.model:
             raise RuntimeError("EMBEDDING_BASE_URL and EMBEDDING_MODEL_NAME must be configured")
@@ -304,12 +304,13 @@ class EmbeddingClient:
 
 
 class JsonChatClient:
-    def __init__(self, prefix: str, default_model: bool = False, enable_fallback: bool = True) -> None:
+    def __init__(self, prefix: str, default_model: bool = False, enable_fallback: bool = True,
+                 base_url: str | None = None, api_key: str | None = None, model: str | None = None) -> None:
         prefix = prefix.upper().rstrip("_")
         self.prefix = prefix
-        self.base_url = os.getenv(f"{prefix}_BASE_URL", "")
-        self.api_key = os.getenv(f"{prefix}_API_KEY", "")
-        self.model = os.getenv(f"{prefix}_MODEL_NAME", "")
+        self.base_url = base_url or os.getenv(f"{prefix}_BASE_URL", "")
+        self.api_key = api_key or os.getenv(f"{prefix}_API_KEY", "")
+        self.model = model or os.getenv(f"{prefix}_MODEL_NAME", "")
         self.timeout = _int_env(f"{prefix}_TIMEOUT", 120)
         self.enable_fallback = enable_fallback
         self.max_prompt_chars = _int_env(f"{prefix}_MAX_PROMPT_CHARS", _int_env("DEFAULT_MODEL_MAX_PROMPT_CHARS", 28000))
@@ -399,10 +400,10 @@ class JsonChatClient:
 
 
 class RerankClient:
-    def __init__(self) -> None:
-        self.base_url = os.getenv("RERANK_BASE_URL") or os.getenv("DEFAULT_MODEL_BASE_URL", "")
-        self.api_key = os.getenv("RERANK_API_KEY") or os.getenv("DEFAULT_MODEL_API_KEY", "EMPTY")
-        self.model = os.getenv("RERANK_MODEL_NAME", "") or os.getenv("DEFAULT_MODEL_NAME", "")
+    def __init__(self, base_url: str | None = None, api_key: str | None = None, model: str | None = None) -> None:
+        self.base_url = base_url or os.getenv("RERANK_BASE_URL") or os.getenv("DEFAULT_MODEL_BASE_URL", "")
+        self.api_key = api_key or os.getenv("RERANK_API_KEY") or os.getenv("DEFAULT_MODEL_API_KEY", "EMPTY")
+        self.model = model or os.getenv("RERANK_MODEL_NAME", "") or os.getenv("DEFAULT_MODEL_NAME", "")
         self.timeout = _int_env("RERANK_TIMEOUT", 120)
         self.rerank_path = os.getenv("RERANK_PATH", "/rerank")
         self.http = HttpModelClient(self.base_url, self.api_key, self.timeout, "rerank_native") if self.base_url and self.model else None

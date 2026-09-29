@@ -756,15 +756,18 @@ def _parse_via_vlm_ocr(
     *,
     backend: str,
     prefix: str,
+    ocr_base_url: str | None = None,
+    ocr_model: str | None = None,
+    ocr_api_key: str | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     suffix = Path(file_name or "").suffix.lower()
     if suffix == ".pdf":
         page_images = _render_pdf_pages(file_bytes, prefix)
     else:
         page_images = [file_bytes]
-    base_url = _vlm_ocr_base_url(prefix)
-    model = os.getenv(f"{prefix}_MODEL", "").strip()
-    api_key = os.getenv(f"{prefix}_API_KEY", os.getenv("DEFAULT_MODEL_API_KEY", "EMPTY")).strip()
+    base_url = ocr_base_url or _vlm_ocr_base_url(prefix)
+    model = ocr_model or os.getenv(f"{prefix}_MODEL", "").strip()
+    api_key = ocr_api_key or os.getenv(f"{prefix}_API_KEY", os.getenv("DEFAULT_MODEL_API_KEY", "EMPTY")).strip()
     prompt = os.getenv(f"{prefix}_PROMPT", os.getenv("QIANFAN_OCR_PROMPT", "")).strip() or None
     timeout = int(os.getenv(f"{prefix}_TIMEOUT", os.getenv("QIANFAN_OCR_TIMEOUT", "600")))
 

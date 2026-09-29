@@ -1088,7 +1088,7 @@ def index_rows(
     anchor_rows: list[dict[str, Any]] | None = None,
     knowledge_unit_rows: list[dict[str, Any]] | None = None,
 ) -> dict[str, int]:
-    embedding_client = EmbeddingClient()
+    embedding_client = EmbeddingClient(**(embedding_overrides or {}))
     chunk_rows = chunk_rows or []
     field_rows = field_rows or []
     qa_rows = qa_rows or []
@@ -1676,7 +1676,7 @@ def search_vector(
     section_types: list[str] | None = None,
     embedding_cache_context: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
-    vector = EmbeddingClient().embed_texts([query], cache_context=embedding_cache_context)[0]
+    vector = EmbeddingClient(**(embedding_overrides or {})).embed_texts([query], cache_context=embedding_cache_context)[0]
     filters = _active_filters(kb_id, file_node_ids, index_generations, profiles)
     results: list[dict[str, Any]] = []
     chunk_resp = _search_vector_index(es, CHUNK_INDEX, _chunk_filters(filters, chunk_types, section_types), vector, top_k)

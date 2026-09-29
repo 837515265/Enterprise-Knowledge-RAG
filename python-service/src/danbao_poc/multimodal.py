@@ -58,7 +58,8 @@ def _int_env(name: str, default: int) -> int:
         return default
 
 
-def _resolve_vision_route() -> Any:
+def _resolve_vision_route(model: str | None = None, base_url: str | None = None,
+                          api_key: str | None = None, timeout: int | None = None) -> Any:
     """VISION 前缀优先；未配置则回退 DEFAULT_MODEL。
 
     注意两点：
@@ -67,11 +68,11 @@ def _resolve_vision_route() -> Any:
     2. 有的环境 DEFAULT 本身就是视觉模型（dev 的 ``qwen3.5-27b-zf`` 支持读图），
        这时即使不配 VISION 也能直接复用 DEFAULT。
     """
-    model = os.getenv("VISION_MODEL", "").strip()
-    base_url = os.getenv("VISION_BASE_URL", "").strip()
+    model = model or os.getenv("VISION_MODEL", "").strip()
+    base_url = base_url or os.getenv("VISION_BASE_URL", "").strip()
     if model and base_url:
-        api_key = os.getenv("VISION_API_KEY", os.getenv("DEFAULT_MODEL_API_KEY", "EMPTY")).strip()
-        timeout = int(os.getenv("VISION_TIMEOUT", os.getenv("DEFAULT_MODEL_TIMEOUT", "600")))
+        api_key = api_key or os.getenv("VISION_API_KEY", os.getenv("DEFAULT_MODEL_API_KEY", "EMPTY")).strip()
+        timeout = timeout or int(os.getenv("VISION_TIMEOUT", os.getenv("DEFAULT_MODEL_TIMEOUT", "600")))
         return ModelRoute(prefix="VISION", tier="primary", model_name=model, base_url=base_url, api_key=api_key, timeout=timeout)
     return ModelRouter().select("DEFAULT")
 

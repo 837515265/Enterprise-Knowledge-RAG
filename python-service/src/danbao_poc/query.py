@@ -1846,13 +1846,14 @@ def rerank_candidates(
     profile: str | None = None,
     use_rerank: bool = True,
     rerank_score_weight: float = 0.0,
+    rerank_overrides: dict[str, str] | None = None,
 ) -> list[dict[str, Any]]:
     if not candidates:
         return []
     reranked: list[dict[str, Any]] = []
     if use_rerank:
         try:
-            reranked = RerankClient().rerank(query, candidates, top_k)
+            reranked = RerankClient(**(rerank_overrides or {})).rerank(query, candidates, top_k)
         except Exception:
             reranked = []
     if reranked and "rank" in reranked[0]:
