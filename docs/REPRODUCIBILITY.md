@@ -1,50 +1,49 @@
 # Reproducibility and local setup status
 
-[Home](../README.md) · [Algorithm map](ALGORITHMS.md)
+[Home](../README.md) · [Algorithm map](ALGORITHMS.md) · [Integration](INTEGRATION.md)
 
-This page separates **checked-in code** from **external dependencies** and **missing artifacts**. It is based on a repository inspection as of 2026-11-06, not on a successfully executed full-stack installation.
+This document separates **checked-in source** from **external dependencies** and **missing artifacts**. It is based on file inspection as of 2026-11-06, not a successful clean-machine installation.
 
-## Component inventory
+## Public source inventory
 
-| Component | In repository | External requirement | Current status |
+| Component | Present in repository | External requirements | Status |
 | --- | --- | --- | --- |
-| Python FastAPI parsing / retrieval | `python-service/src/danbao_poc`, Dockerfile, Compose | MySQL, Elasticsearch 7.x, Neo4j 5.x, Redis, OCR/LLM endpoints, file center | Source and container config present; complete external setup not verified |
-| Java 8 knowledge platform | Maven modules, controllers, entities, SQL resources | Internal Maven parent `com.ludan:central-platform` and enterprise libraries/services | Not independently buildable without organization dependencies |
-| Vue admin UI | Vite config, Vue components, package manifests | Node 14.x, npm ≥ 8.3, platform APIs and auth | References a missing environment-check script |
-| Screenshots | Four files under `assets/screenshots` | None for viewing | Available |
+| Python FastAPI parsing/retrieval | `python-service/src/danbao_poc`, Dockerfile, Compose | MySQL, Elasticsearch 7.x, Neo4j 5.x, Redis, OCR/LLM endpoints, file center | Source/container config present; full setup not verified |
+| Vue management UI | Vue components, package manifests, Vite config | Node 14.x, npm ≥ 8.3, platform API/auth adapter | Code present; references an absent build script |
+| Generic API adapter | [Interface notes](INTEGRATION.md) only | A new, independently licensed implementation | Not yet implemented |
+| UI screenshots | Four images under `assets/screenshots` | None to view | Present |
 
-The Python deployment file `python-service/docker-compose.yml` starts one application service. It does **not** provision all backend databases, OCR servers, or the enterprise platform.
+The organization-specific Java implementation was removed from the proposed public tree because it was not authorized for redistribution. **Deleting current files does not remove them from historical commits**, which must be handled separately before promoting this repository.
 
-## Verified-by-inspection blockers
+## Observed blockers
 
-1. `knowledge-web/package.json` defines `preinstall`, `predev`, and `prebuild` scripts which call `node ./build/scripts/check-env.js`. That file is **not present** in the current tracked file tree.
-2. `python-service/README.md` references `scripts/start-local.ps1`, `scripts/test-local.ps1`, and `scripts/stop-local.ps1`, but the tracked file tree contains no `python-service/scripts/` directory.
-3. `python-service/deploy/README-docker-compose.md` references `uv.lock` and scripts not present in the checked-in snapshot, and describes an older deployment layout. The actual `python-service/Dockerfile` uses `pip install` and copies `src` and `cypher`.
-4. A full local Java installation requires an external Maven parent POM and `com.ludan` artifacts; simply running `mvn clean install` from a public checkout is not guaranteed to succeed.
-5. The repository does not publish an automated end-to-end test suite, benchmark results, or a complete sample-data setup.
+1. `knowledge-web/package.json` invokes `node ./build/scripts/check-env.js` from `preinstall`, `predev` and `prebuild`, but that script is not in the tracked tree.
+2. `python-service/README.md` still refers to local PowerShell helper scripts, yet no `python-service/scripts/` directory is tracked.
+3. An older Python deployment document mentions `uv.lock` and a different Compose service layout. The checked-in Dockerfile uses `pip install` and copies source/Cypher files; the current Compose starts only `app-rag-doc`.
+4. Python API and Vue UI are not an independently working full stack without a platform metadata/auth/file adapter.
+5. No public end-to-end benchmark or verified clean-install result is currently included.
 
-These are repository-file observations. Actual builds and runtime behavior remain **unverified**.
+These are source-tree observations, **not runtime test results**.
 
-## What can be inspected without connecting to company systems?
+## Source reading order
 
-- Parsing and chunking implementation: [Python source](../python-service/src/danbao_poc/).
-- API contracts and Java platform orchestration: [Java source](../java-service/app-knowledge-service/src/main/java/).
-- Frontend components and knowledge-management pages: [web source](../knowledge-web/src/views/knowledge/).
-- Algorithms and possible evaluation methodology: [ALGORITHMS.md](ALGORITHMS.md).
-- Product UI: [screenshots](../assets/screenshots/).
+1. [Parsing, chunking and retrieval code](../python-service/src/danbao_poc/).
+2. [Algorithms and evaluation design](ALGORITHMS.md).
+3. [Vue knowledge-management pages](../knowledge-web/src/views/knowledge/).
+4. [Backend-neutral adapter requirements](INTEGRATION.md).
+5. [Four UI screenshots](../assets/screenshots/).
 
-## For maintainers: checklist for a community-runnable release
+## Checklist for a reproducible community release
 
-- [ ] Confirm rights to publicly distribute enterprise code, assets, and documentation.
-- [ ] Audit tracked configuration and documentation for credentials, network endpoints, internal hostnames, customer information, and proprietary binaries. If a real secret was exposed, rotate it; deleting the current file does not remove Git history.
-- [ ] Choose a LICENSE only after clarifying ownership and third-party component licenses.
-- [ ] Restore or remove broken `build/scripts/check-env.js` references, then verify Node 14 installation.
-- [ ] Reconcile Python deployment documentation with the current Dockerfile/Compose and remove unavailable script references.
-- [ ] Provide a sanitized `docker-compose.demo.yml` (or equivalent) that uses public dependencies and no internal file center.
-- [ ] Supply a licensed toy document set, a sample indexing command, a query command, and expected output.
-- [ ] Add unit/integration tests and CI; document a clean-machine test result.
-- [ ] Run a retrieval and citation benchmark with published baselines and metrics.
+- [ ] Confirm that the remaining Python, Vue and screenshot assets can legally be published.
+- [ ] Remove unauthorized source from **all relevant Git history and refs** using an appropriately reviewed procedure, with a private backup; verify no public fork/cached copy still exposes it.
+- [ ] Audit checked-in configs/docs for internal addresses, credentials, customer information and binary licenses. Rotate any exposed live credentials.
+- [ ] Select an appropriate LICENSE only after checking all rights.
+- [ ] Restore or replace the missing Vue environment-check script and verify a Node 14 installation.
+- [ ] Update Python setup/deployment documentation and remove unavailable script references.
+- [ ] Implement a clean platform adapter and local file storage.
+- [ ] Provide a sanitized demo Compose configuration, licensed toy documents and expected output.
+- [ ] Add automated unit/integration tests and CI.
+- [ ] Publish retrieval, reranking and citation benchmarks with reproducible baselines.
 
-## Reporting installation issues
-
-Open a [GitHub Issue](https://github.com/837515265/Enterprise-Knowledge-RAG/issues) with the component, environment versions, reproduction steps, and sanitized logs. **Never post secrets or internal network addresses in an issue.**
+For installation questions, [open an issue](https://github.com/837515265/Enterprise-Knowledge-RAG/issues) with sanitized steps and logs. Never post API keys or internal host addresses.
