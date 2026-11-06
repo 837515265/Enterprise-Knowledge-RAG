@@ -8,19 +8,19 @@ This page separates **checked-in code** from **external dependencies** and **mis
 
 | Component | In repository | External requirement | Current status |
 | --- | --- | --- | --- |
-| Python FastAPI parsing / retrieval | \`python-service/src/danbao_poc\`, Dockerfile, Compose | MySQL, Elasticsearch 7.x, Neo4j 5.x, Redis, OCR/LLM endpoints, file center | Source and container config present; complete external setup not verified |
-| Java 8 knowledge platform | Maven modules, controllers, entities, SQL resources | Internal Maven parent \`com.ludan:central-platform\` and enterprise libraries/services | Not independently buildable without organization dependencies |
+| Python FastAPI parsing / retrieval | `python-service/src/danbao_poc`, Dockerfile, Compose | MySQL, Elasticsearch 7.x, Neo4j 5.x, Redis, OCR/LLM endpoints, file center | Source and container config present; complete external setup not verified |
+| Java 8 knowledge platform | Maven modules, controllers, entities, SQL resources | Internal Maven parent `com.ludan:central-platform` and enterprise libraries/services | Not independently buildable without organization dependencies |
 | Vue admin UI | Vite config, Vue components, package manifests | Node 14.x, npm ≥ 8.3, platform APIs and auth | References a missing environment-check script |
-| Screenshots | Four files under \`assets/screenshots\` | None for viewing | Available |
+| Screenshots | Four files under `assets/screenshots` | None for viewing | Available |
 
-The Python deployment file \`python-service/docker-compose.yml\` starts one application service. It does **not** provision all backend databases, OCR servers, or the enterprise platform.
+The Python deployment file `python-service/docker-compose.yml` starts one application service. It does **not** provision all backend databases, OCR servers, or the enterprise platform.
 
 ## Verified-by-inspection blockers
 
-1. \`knowledge-web/package.json\` defines \`preinstall\`, \`predev\`, and \`prebuild\` scripts which call \`node ./build/scripts/check-env.js\`. That file is **not present** in the current tracked file tree.
-2. \`python-service/README.md\` references \`scripts/start-local.ps1\`, \`scripts/test-local.ps1\`, and \`scripts/stop-local.ps1\`, but the tracked file tree contains no \`python-service/scripts/\` directory.
-3. \`python-service/deploy/README-docker-compose.md\` references \`uv.lock\` and scripts not present in the checked-in snapshot, and describes an older deployment layout. The actual \`python-service/Dockerfile\` uses \`pip install\` and copies \`src\` and \`cypher\`.
-4. A full local Java installation requires an external Maven parent POM and \`com.ludan\` artifacts; simply running \`mvn clean install\` from a public checkout is not guaranteed to succeed.
+1. `knowledge-web/package.json` defines `preinstall`, `predev`, and `prebuild` scripts which call `node ./build/scripts/check-env.js`. That file is **not present** in the current tracked file tree.
+2. `python-service/README.md` references `scripts/start-local.ps1`, `scripts/test-local.ps1`, and `scripts/stop-local.ps1`, but the tracked file tree contains no `python-service/scripts/` directory.
+3. `python-service/deploy/README-docker-compose.md` references `uv.lock` and scripts not present in the checked-in snapshot, and describes an older deployment layout. The actual `python-service/Dockerfile` uses `pip install` and copies `src` and `cypher`.
+4. A full local Java installation requires an external Maven parent POM and `com.ludan` artifacts; simply running `mvn clean install` from a public checkout is not guaranteed to succeed.
 5. The repository does not publish an automated end-to-end test suite, benchmark results, or a complete sample-data setup.
 
 These are repository-file observations. Actual builds and runtime behavior remain **unverified**.
@@ -38,9 +38,9 @@ These are repository-file observations. Actual builds and runtime behavior remai
 - [ ] Confirm rights to publicly distribute enterprise code, assets, and documentation.
 - [ ] Audit tracked configuration and documentation for credentials, network endpoints, internal hostnames, customer information, and proprietary binaries. If a real secret was exposed, rotate it; deleting the current file does not remove Git history.
 - [ ] Choose a LICENSE only after clarifying ownership and third-party component licenses.
-- [ ] Restore or remove broken \`build/scripts/check-env.js\` references, then verify Node 14 installation.
+- [ ] Restore or remove broken `build/scripts/check-env.js` references, then verify Node 14 installation.
 - [ ] Reconcile Python deployment documentation with the current Dockerfile/Compose and remove unavailable script references.
-- [ ] Provide a sanitized \`docker-compose.demo.yml\` (or equivalent) that uses public dependencies and no internal file center.
+- [ ] Provide a sanitized `docker-compose.demo.yml` (or equivalent) that uses public dependencies and no internal file center.
 - [ ] Supply a licensed toy document set, a sample indexing command, a query command, and expected output.
 - [ ] Add unit/integration tests and CI; document a clean-machine test result.
 - [ ] Run a retrieval and citation benchmark with published baselines and metrics.
