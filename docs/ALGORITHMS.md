@@ -73,7 +73,7 @@ A good claim is *“On the published N-question test set, strategy A scored X vs
 
 ## Engineering constraints to disclose
 
-- Python service documentation currently describes an integration path focused on the \`guarantee_plan\` workflow.
+- Python service documentation currently describes an integration path focused on the `guarantee_plan` workflow.
 - Some Java parent/dependency artifacts and the file center are external to this repository.
 - There is currently no verified independent end-to-end demo or published benchmark in this source snapshot.
 
