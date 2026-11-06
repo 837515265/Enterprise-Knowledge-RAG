@@ -74,7 +74,7 @@ A good claim is *“On the published N-question test set, strategy A scored X vs
 ## Engineering constraints to disclose
 
 - Python service documentation currently describes an integration path focused on the `guarantee_plan` workflow.
-- Some Java parent/dependency artifacts and the file center are external to this repository.
-- There is currently no verified independent end-to-end demo or published benchmark in this source snapshot.
+- The enterprise Java platform has been removed from the proposed public source tree. A replacement platform adapter is not yet supplied; see [INTEGRATION.md](INTEGRATION.md).
+- The Python engine still depends on external file storage and service endpoints. No independent end-to-end demo or published benchmark has been verified in this source snapshot.
 
 See [REPRODUCIBILITY.md](REPRODUCIBILITY.md) for the exact missing pieces.
