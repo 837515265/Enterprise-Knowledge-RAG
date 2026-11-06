@@ -93,7 +93,7 @@ There is **no verified standalone quick start** for the full stack in this publi
 | Component | Prerequisites | Start here |
 | --- | --- | --- |
 | Python parsing/retrieval | Python 3.10 or Docker; provisioned MySQL, ES, Neo4j, Redis, file center, OCR/LLM endpoints | [Python README](python-service/README.md) |
-| Java platform | Java 8, Maven, access to enterprise parent POM and \`com.ludan\` dependencies | [Java module](java-service/) |
+| Java platform | Java 8, Maven, access to enterprise parent POM and `com.ludan` dependencies | [Java module](java-service/) |
 | Web UI | Node 14.x and npm ≥ 8.3; restore missing build/environment script before installing | [Web README](knowledge-web/README.md) |
 
 For exact blockers and a checklist of what needs to be supplied to make a reproducible community demo, read **[REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)**.
