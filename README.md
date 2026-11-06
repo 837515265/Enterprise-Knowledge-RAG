@@ -1,191 +1,125 @@
 <div align="center">
 
-```text
- ______ _   _ _______ ______ _____  _____  _____  _____  _____ ______ 
-|  ____| \ | |__   __|  ____|  __ \|  __ \|  __ \|_   _|/ ____|  ____|
-| |__  |  \| |  | |  | |__  | |__) | |__) | |__) | | | | (___ | |__   
-|  __| | . ` |  | |  |  __| |  _  /|  ___/|  _  /  | |  \___ \|  __|  
-| |____| |\  |  | |  | |____| | \ \| |    | | \ \ _| |_ ____) | |____ 
-|______|_| \_|  |_|  |______|_|  \_\_|    |_|  \_\_____|_____/|______|
-```
+# Enterprise Knowledge RAG
 
-<br/>
+### Multimodal Document Understanding · GraphRAG · Hybrid Search · Evidence-grounded Q&A
 
-# 🧠 Enterprise Knowledge RAG
+**An enterprise knowledge-base platform connecting document parsing, structured knowledge extraction, graph retrieval, and traceable answers.**
 
-**企业知识库 · 多模态文档解析 · 知识图谱 · 混合检索 · 溯源问答**
+[简体中文](README.zh-CN.md) · [Algorithms](docs/ALGORITHMS.md) · [Reproducibility](docs/REPRODUCIBILITY.md)
 
-*从一份文档，到一张知识图谱，再到可溯源的回答。*
-
-<br/>
-
-[![平台](https://img.shields.io/badge/企业知识库-RAG_Platform-1D6CFE?style=for-the-badge)](https://github.com/837515265/Enterprise-Knowledge-RAG)
-[![Python](https://img.shields.io/badge/Python-3.10-3776AB?style=for-the-badge&logo=python&logoColor=white)]()
-[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)]()
-[![Java](https://img.shields.io/badge/Java-8-E34F26?style=for-the-badge&logo=java&logoColor=white)]()
-[![Spring Cloud](https://img.shields.io/badge/Spring_Cloud-6DB33F?style=for-the-badge&logo=spring&logoColor=white)]()
-[![Vue 3](https://img.shields.io/badge/Vue_3-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white)]()
-[![Neo4j](https://img.shields.io/badge/Neo4j-4581C3?style=for-the-badge&logo=neo4j&logoColor=white)]()
-[![Elasticsearch](https://img.shields.io/badge/Elasticsearch-005571?style=for-the-badge&logo=elasticsearch&logoColor=white)]()
-[![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)]()
-[![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)]()
+![Python 3.10](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![Java 8](https://img.shields.io/badge/Java-8-ED8B00)
+![Vue 2.7](https://img.shields.io/badge/Vue-2.7-4FC08D?logo=vuedotjs&logoColor=white)
+![Elasticsearch 7.x](https://img.shields.io/badge/Elasticsearch-7.x-005571)
+![Neo4j 5.x](https://img.shields.io/badge/Neo4j-5.x-4581C3)
 
 </div>
 
----
+> **Project status:** This repository is a source snapshot of a platform integrated with existing enterprise infrastructure. It is **not yet a self-contained, one-command demo**. The Java service uses internal Maven dependencies, and some referenced local development scripts are absent from this snapshot. See [reproducibility and known gaps](docs/REPRODUCIBILITY.md) before attempting deployment.
 
-## ✨ 核心特性
+## Why this project?
 
-<table>
-<tr>
-<td width="33%"><b>🧠 多模态文档解析</b><br/><sub>PDF / Word / 图片 / 扫描件统一解析；Paddle 版面 + 千帆 VLM 双 OCR 后端；分层多图解析（manifest + 多图联合），图表、流程图、单据图像智能提取。</sub></td>
-<td width="33%"><b>✂️ 结构化智能切块</b><br/><sub>目录（Catalog）、AST、容器三种切块策略；章节摘要、锚点单元、答案预构建，让每一段文本都可被精准定位与引用。</sub></td>
-<td width="33%"><b>🕸️ 知识图谱构建</b><br/><sub>业务实体 / 关系 / 制度条款自动抽取 → Neo4j；GraphRAG 社区发现与治理，全局 + 文档级双视角图谱检索。</sub></td>
-</tr>
-<tr>
-<td width="33%"><b>🔍 混合检索</b><br/><sub>query 理解 + 向量（BGE-M3）+ BM25 + 图谱检索多路融合；重排（BGE-Reranker）与置信度打分，检索精准可控。</sub></td>
-<td width="33%"><b>✅ 证据溯源</b><br/><sub>答案逐条绑定原文 / 流程图步骤 / 图片证据（主证据 / 辅助证据 + 置信度）；一键定位原文，多模态「图片 → 原图」闭环。</sub></td>
-<td width="33%"><b>🔐 企业级能力</b><br/><sub>知识库权限与成员管理、解析策略 / 检索策略配置、分块人工审计、全链路操作留痕，满足生产级治理要求。</sub></td>
-</tr>
-</table>
+Many RAG examples demonstrate *PDF → embeddings → chatbot*. Enterprise documents create harder problems: page structure, tables and diagrams, domain entities and relationships, conflicting evidence, access control, and citations that users can verify.
 
----
+Enterprise Knowledge RAG explores a more structured pipeline:
 
-## 🏗️ 系统架构
+1. **Understand the document** using layout-aware OCR or a vision-language OCR backend.
+2. **Preserve its structure** with catalog-, AST-, and container-aware chunking.
+3. **Extract and connect knowledge** in a Neo4j graph.
+4. **Retrieve across multiple channels** with query-aware routing, rank fusion, and reranking.
+5. **Ground results in evidence** with text-span alignment and image/source references.
+
+## Capabilities in the codebase
+
+| Area | Implementation highlights | Source |
+| --- | --- | --- |
+| Multimodal parsing | PDF/image OCR via Paddle layout or Qianfan-compatible VLM; text/Markdown and DOCX extraction | [document_parser.py](python-service/src/danbao_poc/document_parser.py), [multimodal.py](python-service/src/danbao_poc/multimodal.py) |
+| Structure-aware chunking | Catalog, AST, and container strategies; protected table and code blocks | [ast_chunker.py](python-service/src/danbao_poc/ast_chunker.py), [catalog_chunker.py](python-service/src/danbao_poc/catalog_chunker.py) |
+| Knowledge graph | Entity/relationship extraction, deduplication candidates, community grouping, Neo4j indexing | [anchor_deduper.py](python-service/src/danbao_poc/anchor_deduper.py), [graph_community.py](python-service/src/danbao_poc/graph_community.py) |
+| Hybrid retrieval | QA, structured data, section summary, graph, BM25, and vector channels; profile-aware retrieval planning | [query.py](python-service/src/danbao_poc/query.py), [retrieval_plan.py](python-service/src/danbao_poc/retrieval_plan.py) |
+| Citation alignment | Exact, normalized, and LCS-based evidence alignment with coverage/density checks | [evidence_aligner.py](python-service/src/danbao_poc/evidence_aligner.py) |
+| Platform features | Knowledge-base/file APIs, permissions, audit trails, parse task callbacks, QA management, graph UI | [Java service](java-service/app-knowledge-service/), [web UI](knowledge-web/src/views/knowledge/) |
+
+These are **implementation features, not published benchmark claims**. Domain-profile support and end-to-end deployment have different maturity levels; see the linked module documentation.
+
+## Architecture
 
 ```mermaid
-flowchart LR
-    subgraph PY["python-service · AI 引擎"]
-        PARSER["📄 解析引擎<br/>OCR / 多模态 / 切块 / 抽取"]
-        GRAPH["🕸️ 图谱构建<br/>实体关系 → Neo4j"]
-        RETRIEVER["🔍 检索引擎<br/>query理解 / 多路融合 / 重排"]
-    end
-    subgraph JS["java-service · 平台后端"]
-        PLATFORM["📦 知识库 / 文件 / QA / 审计<br/>Spring Cloud + MyBatis-Plus"]
-    end
-    subgraph WEB["knowledge-web · 前端"]
-        UI["🖥️ 知识库管理 / 问答 / 图谱可视化"]
-    end
-
-    UI <--> PLATFORM
-    PLATFORM <--> PARSER
-    PLATFORM <--> RETRIEVER
-    PARSER -->|"中间文档 + 切块 + 结构化字段"| STORE[(MySQL)]
-    PARSER -->|"向量 + BM25"| ES[(Elasticsearch)]
-    GRAPH --> NEO[(Neo4j<br/>知识图谱)]
-    RETRIEVER --> ES
-    RETRIEVER --> NEO
-    RETRIEVER --> STORE
+flowchart TB
+    UI["Web UI: Vue 2.7"] --> API["Java platform: Spring Cloud"]
+    API --> PARSE["Python: document parsing"]
+    API --> SEARCH["Python: retrieval / reranking"]
+    PARSE --> SQL[("MySQL: documents / chunks")]
+    PARSE --> ES[("Elasticsearch: BM25 / vectors")]
+    PARSE --> GRAPH[("Neo4j: knowledge graph")]
+    SEARCH --> SQL
+    SEARCH --> ES
+    SEARCH --> GRAPH
 ```
 
----
+Supporting infrastructure includes Redis, OCR/model endpoints, and an external file-center service.
 
-## 📸 界面一览
+## Screenshots
 
-<table>
-<tr>
-<td width="50%" align="center">
-  <img src="assets/screenshots/01-document-parse-analysis.png" width="100%"/>
-  <br/><sub>📄 <b>多模态文档解析</b> — 章节摘要 / 业务流程抽取 / 关键字段，80 Chunk · 74 图片 · 18 实体</sub>
-</td>
-<td width="50%" align="center">
-  <img src="assets/screenshots/02-multimodal-process.png" width="100%"/>
-  <br/><sub>🧩 <b>流程级多模态解析</b> — 步骤时间线 + 图片证据（主证据 / 辅助证据）</sub>
-</td>
-</tr>
-<tr>
-<td width="50%" align="center">
-  <img src="assets/screenshots/03-knowledge-graph.png" width="100%"/>
-  <br/><sub>🕸️ <b>全局知识图谱</b> — 120 知识实体 · 145 实体关系 · 节点属性抽屉</sub>
-</td>
-<td width="50%" align="center">
-  <img src="assets/screenshots/04-multimodal-evidence.png" width="100%"/>
-  <br/><sub>🖼️ <b>图片证据溯源</b> — 原图定位 + 移动端表单还原</sub>
-</td>
-</tr>
-</table>
-
----
-
-## 🛠️ 技术栈
-
-| 层 | 技术 |
+| Document parsing | Process-level multimodal evidence |
 | --- | --- |
-| 🧠 解析 / 检索引擎 | Python 3.10 · FastAPI · PyMuPDF · PaddleOCR · 千帆 VLM · jieba |
-| 🔍 存储 / 检索 | Elasticsearch 7.x（向量 + BM25）· Redis · MySQL |
-| 🕸️ 知识图谱 | Neo4j 5.x · GraphRAG 社区治理 / 受限扩散检索 |
-| 📦 平台后端 | Java 8 · Spring Cloud · MyBatis-Plus · Feign · Nacos · XXL-Job |
-| 🖥️ 前端 | Vue 3 · Vite · Ant Design Vue · G6（图谱可视化） |
+| ![Document parsing and analysis](assets/screenshots/01-document-parse-analysis.png) | ![Multimodal process analysis](assets/screenshots/02-multimodal-process.png) |
+| Knowledge graph | Image evidence tracing |
+| ![Knowledge graph visualization](assets/screenshots/03-knowledge-graph.png) | ![Image evidence tracing](assets/screenshots/04-multimodal-evidence.png) |
 
----
-
-## 🚀 快速开始
-
-仓库由三个子项目组成，各自有独立的 README 与配置模板：
-
-```bash
-# 1. 解析 / 检索引擎（AI 引擎）
-cd python-service
-copy .env.example .env          # 填写 MySQL / ES / Neo4j / Redis / 模型配置
-uvicorn danbao_poc.api.app_service:app
-
-# 2. 平台后端
-cd java-service
-mvn clean install
-# 复制脱敏配置：app-knowledge-service/src/main/resources/application-local.yml.example → application-local.yml
-
-# 3. 前端
-cd knowledge-web
-npm install
-npm run dev
-```
-
-> 运行依赖 MySQL、Elasticsearch、Neo4j、Redis 与文件中心，具体配置字段见各子项目说明。
-
----
-
-## 📦 仓库结构
+## Repository layout
 
 ```text
-Enterprise-Knowledge-RAG/
-├── python-service/         # 解析 / 检索 AI 引擎（FastAPI）
-│   ├── src/danbao_poc/     #   核心包：解析 · 切块 · 抽取 · 图谱 · 检索
-│   ├── deploy/             #   部署配置模板（docker-compose / nacos / nginx）
-│   └── doc/                #   技术方案与设计文档
-├── java-service/           # 知识库平台后端（Spring Cloud）
-│   ├── app-knowledge-service/    # 服务端（含 SQL 脚本 / MyBatis Mapper）
-│   ├── app-knowledge-api/        # 接口 / DTO 模块
-│   └── docs/               #   架构设计 / 数据库设计
-├── knowledge-web/          # 知识库管理前端（Vue 3 + G6）
-│   └── src/views/knowledge/      # 知识库 / 文件 / 分块 / 策略 / 图谱 / 问答页面
-└── assets/screenshots/     # 产品界面截图
+python-service/   FastAPI-based parsing, indexing, retrieval, graph processing
+java-service/     Spring Cloud knowledge-base platform and API contracts
+knowledge-web/    Vue 2.7 + Vite 4 admin UI and graph visualization
+assets/           Product screenshots
+docs/             Algorithm map and reproducibility notes
 ```
 
----
+### Technology
 
-## 🗺️ 路线图
+- **AI services:** Python 3.10, FastAPI, PyMuPDF, Paddle layout OCR, OpenAI-compatible model clients.
+- **Search & storage:** Elasticsearch 7.x, Neo4j 5.x, MySQL, Redis.
+- **Backend:** Java 8, Spring Cloud, MyBatis-Plus, Nacos and enterprise Maven components.
+- **Frontend:** **Vue 2.7** (not Vue 3), Vite 4, Ant Design Vue 1.x, G6 4.x, Pinia.
 
-- ✅ 多模态分层解析：manifest + 多图联合 + 图片字节剥离
-- ✅ 全局 / 文档级知识图谱检索 · 图谱治理与受限扩散
-- ✅ 检索证据溯源：流程证据 / 图片证据 / 引用格式化
-- 🔜 ColPali 视觉检索接入（可行性分析已完成）
-- 🔜 VisRAG 图文混合检索增强（可行性分析已完成）
-- 🔜 开放平台 SDK 与多模态问答增强
+## Getting started
 
----
+There is **no verified standalone quick start** for the full stack in this public snapshot.
 
-## 📄 更多文档
+| Component | Prerequisites | Start here |
+| --- | --- | --- |
+| Python parsing/retrieval | Python 3.10 or Docker; provisioned MySQL, ES, Neo4j, Redis, file center, OCR/LLM endpoints | [Python README](python-service/README.md) |
+| Java platform | Java 8, Maven, access to enterprise parent POM and \`com.ludan\` dependencies | [Java module](java-service/) |
+| Web UI | Node 14.x and npm ≥ 8.3; restore missing build/environment script before installing | [Web README](knowledge-web/README.md) |
 
-- [python-service 技术方案与设计文档](python-service/doc/00_index.md)
-- [java-service 架构设计](java-service/docs/架构设计/部署环境与系统架构说明.md)
-- [java-service 数据库设计](java-service/docs/数据库设计文档.md)
+For exact blockers and a checklist of what needs to be supplied to make a reproducible community demo, read **[REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)**.
+
+## Algorithm design and evaluation
+
+The most useful entry point for technical readers is **[ALGORITHMS.md](docs/ALGORITHMS.md)**. It maps core techniques to source files, explains design trade-offs, and identifies measurements needed to substantiate effectiveness.
+
+No Recall@k, MRR, accuracy, or latency improvement is claimed here without a published evaluation set and reproducible results.
+
+## Roadmap
+
+- [x] Multimodal parsing and structured chunk representation in code
+- [x] Graph construction, hybrid retrieval, and evidence-alignment components
+- [ ] Publish a license **after confirming ownership and redistribution rights**
+- [ ] Provide a sanitized sample dataset and a dependency-light local demo
+- [ ] Add automated tests, CI, and reproducible retrieval/citation benchmarks
+- [ ] Verify a complete installation path independent of internal infrastructure
+- [ ] Explore ColPali / VisRAG-style visual retrieval enhancements
+
+## Important note on reuse
+
+The repository currently has **no top-level open-source license**. Public visibility alone does not grant permission to redistribute or reuse the code. Any license should be chosen only after confirming the rights to the enterprise-related components and assets.
 
 ---
 
 <div align="center">
-
-**Enterprise Knowledge RAG** · 从文档到知识，从知识到答案
-
-Made with 🧠 by the Knowledge Platform Team
-
+Built for structured enterprise knowledge retrieval, multimodal evidence, and traceable answers.
 </div>
